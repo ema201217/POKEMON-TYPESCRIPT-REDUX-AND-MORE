@@ -1,0 +1,46 @@
+{
+  "url": {
+    "base": "https://pokeapi.co/api/v2/",
+    "getPokemons": {
+      "params": {
+        "pokemon": "pokemon"
+      },
+      "queries": {
+        "pokemon": {
+          "limit": 20,
+          "offset": 0
+        }
+      }
+    }
+  },
+  "mappers": {
+    "mappedPokemon": {
+      "include": [
+        {
+          "key": "name",
+          "searchProps": "name"
+        },
+        {
+          "key": "id",
+          "searchProps": "id"
+        },
+        {
+          "key": "height",
+          "searchProps": "height"
+        },
+        {
+          "key": "abilities",
+          "searchProps": "ability.name"
+        },
+        {
+          "key": "image",
+          "searchProps": "sprites.other.dream_world.front_default"
+        },
+        {
+          "key": "weight",
+          "searchProps": "weight"
+        }
+      ]
+    }
+  }
+}
