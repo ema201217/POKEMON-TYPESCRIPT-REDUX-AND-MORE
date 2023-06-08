@@ -7,12 +7,6 @@ export interface ParametersGetPokemons {
 
 export type PromiseList = Promise<NamedAPIResourceList>;
 
-export interface ParametersGetPokemon {
-  by?: string;
-  valueNum?: number;
-  valueStr?: string;
-}
-
 export type PromisePoke = Promise<Pokemon>;
 
 export interface getPokemonsMappedAsyncInterface {

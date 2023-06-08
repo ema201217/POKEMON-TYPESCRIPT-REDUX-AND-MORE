@@ -15,15 +15,14 @@ export const pokemonSlice: Slice<PokeSliceInitialState> = createSlice({
       state: PokeSliceInitialState,
       action: PayloadAction<SavePokemonInterface>
     ) => {
-      const pokeJSON = localStorage.getItem('pokemons');
+      /* const pokeJSON = localStorage.getItem('pokemons');
       const pokeStorage = pokeJSON ? JSON.parse(pokeJSON) : null;
       if (pokeStorage) {
         console.log(pokeStorage);
-      }
+      } */
       const {
         payload: { data, count },
       } = action;
-
       state.data = data;
       state.count = count;
     },

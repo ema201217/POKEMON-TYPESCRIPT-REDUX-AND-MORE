@@ -25,7 +25,9 @@
     "quotes": ["error", "single"], // exigir en archivos js las comillas simples
     "no-multiple-empty-lines": ["error", { "max": 1, "maxEOF": 0 }], // lineas vacías no mas de dos saltos de lineas y al final de los archivos no puede haber salto de lineas 
     "@typescript-eslint/no-non-null-assertion": "off", // Esto soluciona un problema en el archivo main.tsx
-    "@typescript-eslint/no-explicit-any": "off"
+    "@typescript-eslint/no-explicit-any": "off",
+    "no-unused-vars": "off",
+    "@typescript-eslint/no-unused-vars": "off"
   },
   "globals": {
     "store":true

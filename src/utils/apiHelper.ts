@@ -1,3 +1,4 @@
+import { ParametersGetPokemons } from '../services/public/apiPokemon/interface';
 import { CacheLocal, ParametersInclude } from './interface';
 
 // Cache local
@@ -5,12 +6,13 @@ const constantData: CacheLocal = {
   configUrls: null,
   pokemons: [],
   pokemonParametersInclude: null,
+  pokemonsUrl: null,
 };
 
 export const clearCache = (): void => {
   constantData.configUrls = null;
   constantData.pokemons = [];
-  constantData.pokemonParametersInclude = null;
+  (constantData.pokemonParametersInclude = null), (constantData.pokemonsUrl = null);
 };
 
 export const getConfigUrls = async (): Promise<any> => {
@@ -27,4 +29,20 @@ export const getPokemonParametersInclude = async (): Promise<
     constantData.pokemonParametersInclude ||
     (await getConfigUrls()).mappers.mappedPokemon.include;
   return constantData.pokemonParametersInclude;
+};
+
+export const getUrlGetPokemons = async (): Promise<string> => {
+  if (!constantData.pokemonsUrl) {
+    const {
+      url: {
+        base,
+        getPokemons: {
+          params: { pokemon },
+        },
+      },
+    } = await getConfigUrls();
+
+    constantData.pokemonsUrl = constantData.pokemonsUrl || `${base}${pokemon}`;
+  }
+  return constantData.pokemonsUrl;
 };

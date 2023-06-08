@@ -1,37 +1,25 @@
-import { PokemonClient } from 'pokenode-ts';
 import {
-  ParametersGetPokemon,
   ParametersGetPokemons,
   PromiseList,
   PromisePoke,
   getPokemonsMappedAsyncInterface,
 } from './interface';
-import { ID_POKEMONS, NAME_POKEMONS } from '../../../constants';
-import { getPokemonParametersInclude } from '../../../utils/apiHelper';
+import { getPokemonParametersInclude, getUrlGetPokemons } from '../../../utils/apiHelper';
 import { mappedPokemon } from '../../../utils/mappers';
 import _ from 'lodash';
 import { FormatPokemonLocal } from '../../../types/pokemons';
 import { ParametersInclude } from '../../../utils/interface';
+import { Pokemon } from 'pokenode-ts';
 
-const P = new PokemonClient();
-export const getPokemons = async ({
-  page = 1,
-  limit = 20,
-}: ParametersGetPokemons): PromiseList => {
-  const offset = limit * page;
-  console.log(offset);
-  return await P.listPokemons(offset, limit);
+const getPokemons = async ({ page, limit }: ParametersGetPokemons): PromiseList => {
+  const url = await getUrlGetPokemons();
+  const offset = page === 1 ? 0 : page * limit;
+  return fetch(`${url}?limit=${limit}&offset=${offset}`).then((res) => res.json());
 };
 
-export const getPokemon = ({
-  by = 'name',
-  valueNum = ID_POKEMONS.IVYSUAR,
-  valueStr = NAME_POKEMONS.IVYSUAR,
-}: ParametersGetPokemon): PromisePoke => {
-  if (by === 'name') {
-    return P.getPokemonByName(valueStr);
-  }
-  return P.getPokemonById(valueNum);
+export const getPokemonByName = async (name: string): PromisePoke => {
+  const url = await getUrlGetPokemons();
+  return fetch(`${url}/${name}`).then((res) => res.json());
 };
 
 export const getPokemonsMappedAsync = ({
@@ -45,16 +33,16 @@ export const getPokemonsMappedAsync = ({
         page,
       }).then(async ({ count, results }) => {
         const pokemonsPromises = results.map(async ({ name }) => {
-          const data = await getPokemon({ valueStr: name });
+          const data: Pokemon = await getPokemonByName(name);
           const include: ParametersInclude[] | null = await getPokemonParametersInclude();
           const dataMapped: FormatPokemonLocal = mappedPokemon({ data, include });
           return dataMapped;
         });
-        const data = await Promise.all(pokemonsPromises);
-        const dataMap = _.map(data, (poke) =>
+        let data = await Promise.all(pokemonsPromises);
+        data = _.map(data, (poke: FormatPokemonLocal) =>
           _.merge({}, poke, { image_gif: getImageGif(poke.id) })
         );
-        resolve({ data: dataMap, count });
+        resolve({ data, count });
       });
     } catch (error) {
       reject(error);
