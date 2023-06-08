@@ -1,17 +1,17 @@
 /* eslint-disable max-len */
-import { useEffect, useState, useMemo, ChangeEvent, useCallback } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../redux/store";
-import { getPokemonsMappedAsync } from "../../services/public/apiPokemon";
-import { savePokemons } from "../../redux/slices/pokemon";
-import { FormatPokemonLocal } from "../../types/pokemons";
-import _ from "lodash";
+import { useEffect, useState, useMemo, ChangeEvent, useCallback } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../redux/store';
+import { getPokemonsMappedAsync } from '../../services/public/apiPokemon';
+import { savePokemons } from '../../redux/slices/pokemon';
+import { FormatPokemonLocal } from '../../types/pokemons';
+import _ from 'lodash'; 
 
 export function App() {
   const dispatch = useDispatch();
   const [page, setPage] = useState<number>(1);
   const [limit, setLimit] = useState<number>(20);
-  const [inputValue, setInputValue] = useState<string>("");
+  const [inputValue, setInputValue] = useState<string>('');
   const { data, count } = useSelector(({ pokemons }: RootState) => pokemons.pokemons);
 
   const handleChangeInputValue = ({
@@ -37,7 +37,7 @@ export function App() {
     () =>
       data
         ?.filter((poke: FormatPokemonLocal) =>
-          inputValue ? RegExp(inputValue, "i").test(poke.name) : true
+          inputValue ? RegExp(inputValue, 'i').test(poke.name) : true
         )
         .map(({ name, id }) => <li key={id}>{name}</li>),
     [data, inputValue]
@@ -49,14 +49,14 @@ export function App() {
       <button onClick={() => setPage(page > 1 ? page - 1 : 1)}>page -</button>
       <button
         onClick={() => {
-          console.log("siguiente pagina");
+          console.log('siguiente pagina');
           setPage(page + 1);
         }}
       >
         page +
       </button>
 
-      <input type="text" placeholder="Buscar Poke" onChange={handleChangeInputValue} />
+      <input type='text' placeholder='Buscar Poke' onChange={handleChangeInputValue} />
       {/* <ul>
         {pagination.map((_, i: number) => {
           return <li key={i}>{i + 1}</li>;
