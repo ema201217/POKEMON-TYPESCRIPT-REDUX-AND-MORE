@@ -3,6 +3,7 @@ export interface FormatPokemonLocal {
   id: number;
   height: number;
   abilities: string[];
-  image: string;
+  image_default: string;
+  image_gif?: string;
   weight: number;
 }

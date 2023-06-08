@@ -33,7 +33,7 @@
           "searchProps": "ability.name"
         },
         {
-          "key": "image",
+          "key": "image_default",
           "searchProps": "sprites.other.dream_world.front_default"
         },
         {

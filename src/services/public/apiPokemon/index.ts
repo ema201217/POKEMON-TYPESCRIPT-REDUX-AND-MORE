@@ -9,14 +9,18 @@ import {
 import { ID_POKEMONS, NAME_POKEMONS } from '../../../constants';
 import { getPokemonParametersInclude } from '../../../utils/apiHelper';
 import { mappedPokemon } from '../../../utils/mappers';
+import _ from 'lodash';
+import { FormatPokemonLocal } from '../../../types/pokemons';
+import { ParametersInclude } from '../../../utils/interface';
 
 const P = new PokemonClient();
-export const getPokemons = ({
+export const getPokemons = async ({
   page = 1,
   limit = 20,
 }: ParametersGetPokemons): PromiseList => {
   const offset = limit * page;
-  return P.listPokemons(offset, limit);
+  console.log(offset);
+  return await P.listPokemons(offset, limit);
 };
 
 export const getPokemon = ({
@@ -42,14 +46,22 @@ export const getPokemonsMappedAsync = ({
       }).then(async ({ count, results }) => {
         const pokemonsPromises = results.map(async ({ name }) => {
           const data = await getPokemon({ valueStr: name });
-          const include = await getPokemonParametersInclude();
-          const dataMapped = mappedPokemon({ data, include });
+          const include: ParametersInclude[] | null = await getPokemonParametersInclude();
+          const dataMapped: FormatPokemonLocal = mappedPokemon({ data, include });
           return dataMapped;
         });
         const data = await Promise.all(pokemonsPromises);
-        resolve({ data, count });
+        const dataMap = _.map(data, (poke) =>
+          _.merge({}, poke, { image_gif: getImageGif(poke.id) })
+        );
+        resolve({ data: dataMap, count });
       });
     } catch (error) {
       reject(error);
     }
   });
+
+const getImageGif = (id: number): string => {
+  // eslint-disable-next-line max-len
+  return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/${id}.gif`;
+};
