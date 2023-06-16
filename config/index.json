@@ -3,7 +3,8 @@
     "base": "https://pokeapi.co/api/v2/",
     "getPokemons": {
       "params": {
-        "pokemon": "pokemon"
+        "pokemon": "pokemon",
+        "ability": "ability"
       },
       "queries": {
         "pokemon": {
@@ -39,6 +40,14 @@
         {
           "key": "weight",
           "searchProps": "weight"
+        }
+      ]
+    },
+    "mappedAbility": {
+      "include": [
+        {
+          "key": "name",
+          "searchProps": "name"
         }
       ]
     }

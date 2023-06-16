@@ -7,3 +7,7 @@ export interface FormatPokemonLocal {
   image_gif?: string;
   weight: number;
 }
+
+export interface FormatAbilityLocal {
+  name: string;
+}

@@ -1,3 +1,5 @@
 node_modules
 build
 __tests__
+tailwind.config.js
+postcss.config.js
