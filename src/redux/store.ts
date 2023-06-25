@@ -1,5 +1,5 @@
-import { combineReducers, configureStore, Store } from '@reduxjs/toolkit';
-import { pokemonSlice } from './slices/pokemon';
+import { combineReducers, configureStore, Store } from "@reduxjs/toolkit";
+import { pokemonSlice } from "./slices/pokemon";
 
 export interface RootState {
   pokemons: ReturnType<typeof rootReducer>;

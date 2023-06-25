@@ -1,15 +1,12 @@
-export interface SelectWithSearchI<T> {
-  onChange: T
+export interface InputSearchI {
+  onShowList: () => void;
+  showList: boolean
+}
+export interface ListSearchI<T> {
+  children: T;
 }
 
-export interface InputSearchI<T>{
-  onChange: T
-}
-
-export interface ListSearchI<T>{
-  children: T
-}
-
-export interface ItemListI<T>{
-  index: T
+export interface ItemListI<T,I> {
+  name: T;
+  id: I
 }

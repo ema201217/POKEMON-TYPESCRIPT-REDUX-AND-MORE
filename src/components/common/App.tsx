@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import { useEffect, useState, useMemo, ChangeEvent, useCallback, useRef } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import { getPokemonsMappedAsync } from "../../services/public/apiPokemon";
@@ -12,18 +12,14 @@ export function App() {
   const dispatch = useDispatch();
   const [page, setPage] = useState<number>(1);
   const [limit, setLimit] = useState<number>(20);
-  const [inputValue, setInputValue] = useState<string>("");
-  const { data, count } = useSelector(({ pokemons }: RootState) => pokemons.pokemons);
-  const selectRef = useRef(null);
-  const handleChangeInputValue = ({
-    target: { value },
-  }: ChangeEvent<HTMLInputElement>) => {
-    setInputValue(value);
-  };
+
+  const { pokemons, count, keyword, abilityFilter, entityActiveFilter } = useSelector(
+    ({ pokemons }: RootState) => pokemons.pokemons
+  );
 
   useEffect(() => {
     getPokemonsMappedAsync({ limit, page }).then(({ data }) =>
-      dispatch(savePokemons({ data, count }))
+      dispatch(savePokemons({ pokemons: data, count }))
     );
   }, [limit, page]);
 
@@ -33,34 +29,28 @@ export function App() {
   //   return pages;
   // }, [count, limit]);
 
+  const filterByPokemons = ({ name }: FormatPokemonLocal) =>
+    keyword ? RegExp(keyword, "i").test(name) : true;
+
+  const filterByAbility = ({ abilities }: FormatPokemonLocal) =>
+    abilityFilter.length
+      ? abilities.some((ability) => abilityFilter.includes(ability))
+      : true;
+
   const filterAndMapPokes = useCallback(
     () =>
-      data
-        ?.filter((poke: FormatPokemonLocal) =>
-          inputValue ? RegExp(inputValue, "i").test(poke.name) : true
-        )
+      pokemons
+        ?.filter(entityActiveFilter === "pokemons" ? filterByPokemons : filterByAbility)
         .map(({ name, id }) => <li key={id}>{name}</li>),
-    [data, inputValue]
+    [pokemons, keyword, entityActiveFilter, abilityFilter]
   );
-
-  const handleChange = () => {
-    setPage(2);
-  };
 
   return (
     <div className="">
-      <SelectWithSearch onChange={handleChange} />
+      <SelectWithSearch />
       {/* <button onClick={() => setLimit(2)}>limit2</button>
       <button onClick={() => setPage(page > 1 ? page - 1 : 1)}>page -</button>
       <button onClick={() => setPage(page + 1)}>page +</button> */}
-
-      {/* <input type='text' placeholder='Buscar Poke' onChange={handleChangeInputValue} /> */}
-      {/* <select ref={selectRef} multiple>
-        <option value='1'>1</option>
-        <option value='2'>2</option>
-        <option value='3'>3</option>
-        <option value='4'>4</option>
-      </select> */}
 
       {/* <ul>
         {pagination.map((_, i: number) => {

@@ -10,4 +10,5 @@ export interface FormatPokemonLocal {
 
 export interface FormatAbilityLocal {
   name: string;
+  id: number | string;
 }
